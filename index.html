@@ -1,45 +1,36 @@
+<!-- test.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Message Decryption</title>
+    <title>Decrypt API Test</title>
 </head>
 <body>
-    <h1>Decrypt Your Message</h1>
-    
-    <!-- Input form -->
+    <h2>Test Decrypt API</h2>
     <form id="decryptForm">
-        <label for="encryptedMessage">Enter Encrypted Message:</label><br>
-        <textarea id="encryptedMessage" rows="4" cols="50" required></textarea><br><br>
-        <button type="submit">Decrypt Message</button>
+        <textarea id="message" rows="4" cols="50" placeholder="Enter encrypted message"></textarea>
+        <br>
+        <button type="submit">Decrypt</button>
     </form>
-
-    <!-- Output -->
-    <h2>Decrypted Message:</h2>
-    <pre id="output"></pre>
+    <div id="result"></div>
 
     <script>
-        document.getElementById('decryptForm').addEventListener('submit', async (event) => {
-            event.preventDefault(); // Prevent form submission
-
-            const message = document.getElementById('encryptedMessage').value;
-
+        document.getElementById('decryptForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const message = document.getElementById('message').value;
+            
             try {
-                const response = await fetch('https://test-backend-kappa-plum.vercel.app/api/decrypt', {
+                const response = await fetch('https://test-backend-kappa-seven.vercel.app/api/decrypt', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({ message })
                 });
-
-                const result = await response.json();
                 
-                // Display the result
-                document.getElementById('output').textContent = JSON.stringify(result, null, 2);
+                const data = await response.text();
+                document.getElementById('result').textContent = data;
             } catch (error) {
-                document.getElementById('output').textContent = 'Error: ' + error.message;
+                document.getElementById('result').textContent = 'Error: ' + error.message;
             }
         });
     </script>
