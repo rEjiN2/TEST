@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Decryption</title>
+</head>
+<body>
+    <h1>Decrypt Your Message</h1>
+    
+    <!-- Input form -->
+    <form id="decryptForm">
+        <label for="encryptedMessage">Enter Encrypted Message:</label><br>
+        <textarea id="encryptedMessage" rows="4" cols="50" required></textarea><br><br>
+        <button type="submit">Decrypt Message</button>
+    </form>
+
+    <!-- Output -->
+    <h2>Decrypted Message:</h2>
+    <pre id="output"></pre>
+
+    <script>
+        document.getElementById('decryptForm').addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent form submission
+
+            const message = document.getElementById('encryptedMessage').value;
+
+            try {
+                const response = await fetch('http://localhost:3000/decrypt', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message })
+                });
+
+                const result = await response.json();
+                
+                // Display the result
+                document.getElementById('output').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('output').textContent = 'Error: ' + error.message;
+            }
+        });
+    </script>
+</body>
+</html>
